@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Aaron Lifton"]
   spec.email         = ["aaronlifton@gmail.com"]
 
-  spec.summary       = %q{optimize images on s3}
-  spec.homepage      = "http://github.com/aaronlifton2"
+  spec.summary       = %q{optimize images in a s3 bucket with image_optim}
+  spec.homepage      = "http://github.com/aaronlifton2/s3_image_optimizer"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
