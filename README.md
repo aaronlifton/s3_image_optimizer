@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-```
+```ruby
 require 's3_image_optimizer'
 
 # optimize an entire bucket
