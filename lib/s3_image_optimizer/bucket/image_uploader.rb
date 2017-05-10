@@ -11,24 +11,27 @@ module S3ImageOptimizer::Bucket
     }
 
 
-    def initialize(client:, bucket:, path:, options: {})
-      super(bucket, path)
+    def initialize(client:, bucket:, path:, options: {}, tmp_paths:)
+      super(bucket, path, tmp_paths)
       @s3_client = client
       @options = DEFAULT_OPTIONS.merge(options)
       @uploaded_images = []
     end
 
     def upload_all(images = [])
+      puts "\nUploading..."
       @uploaded_images = images.each do |i|
         upload_image(i)
       end
     end
 
     def upload_image(image)
+      return unless image
       file_options = get_file_options(image)
-      binding.pry
-      s3_obj = Aws::S3::Object.new(@bucket.name, @path, :client => @s3_client)
-      s3_obj.upload_file(image.path, file_options)
+      s3 = Aws::S3::Resource.new
+      k = image.split(@tmp_paths[:optimize_path]).last[1..-1]
+      s3.bucket(@bucket.name).object(k).upload_file(image, file_options)
+      puts "Uploaded #{image}"
     end
 
     def get_file_options(image)
