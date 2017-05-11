@@ -27,7 +27,9 @@ class S3ImageOptimizer::Client
   }
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
-    if @options[:dir] && @options[:dir][-1] != '/'
+    if @options[:dir].empty?
+      @options[:dir] = nil
+    elsif @options[:dir][-1] != '/'
       @options[:dir] += '/'
     end
     raise ArgumentError.new("bucket is required") unless @options[:bucket]
