@@ -1,5 +1,22 @@
 # S3ImageOptimizer
 
+## Requirements
+
+Debin/Ubuntu
+```
+sudo apt-get install -y jpegoptim
+```
+
+Other
+```
+JPEGOPTIM_VERSION=X.Y.Z
+cd /tmp
+curl -O http://www.kokkonen.net/tjko/src/jpegoptim-$JPEGOPTIM_VERSION.tar.gz
+tar zxf jpegoptim-$JPEGOPTIM_VERSION.tar.gz
+cd jpegoptim-$JPEGOPTIM_VERSION
+./configure && make && make install
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
