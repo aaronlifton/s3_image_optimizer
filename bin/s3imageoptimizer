@@ -15,5 +15,5 @@ when "optimize_daemon"
 when "optimize"
   exec task
 else
-  puts "Argument required!\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nArguments\n[bucket]          - optional bucket name\n[path]            - tmp path\n\nHappy optimizing! ¯\\_(ツ)_/¯"
+  puts "Command required!\ns3imageoptimizer [command] [arg1] [arg2]\n\nCommands\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nArguments\n[bucket]          - optional bucket name\n[path]            - tmp path\n\nHappy optimizing! ¯\\_(ツ)_/¯"
 end
