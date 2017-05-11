@@ -45,10 +45,16 @@ S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket'})
 S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket', dir: 'images'})
 ```
 
-## Use as daemon
+## Use on command line
 
 ```
-rake optimize_d
+s3imageoptimizer CMD
+
+Available commands:
+[optimize_daemon] - run in background
+[optimize]        - run in foreground
+
+Happy optimizing! ¯\_(ツ)_/¯
 ```
 
 ## Development
