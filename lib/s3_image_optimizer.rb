@@ -7,7 +7,7 @@ module S3ImageOptimizer
   class << self
     DEFAULT_OPTIONS = {
       bucket: ENV['AWS_BUCKET'],
-      dir: nil
+      dir: ENV['AWS_BUCKET_DIR']
     }
     def optimize_bucket!(options = {})
       options = DEFAULT_OPTIONS.merge(options)
