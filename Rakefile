@@ -7,7 +7,7 @@ end
 
 task :optimize do
   require 's3_image_optimizer'
-  S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket', dir: 'images', upload_bucket: 'my-bucket-optimized'})
+  S3ImageOptimizer.optimize_bucket!({bucket: ENV['AWS_BUCKET'], dir: nil, upload_bucket: ENV['AWS_UPLOAD_BUCKET']})
 end
 
 task :optimize_d do

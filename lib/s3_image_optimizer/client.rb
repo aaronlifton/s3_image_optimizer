@@ -23,7 +23,7 @@ class S3ImageOptimizer::Client
         append: '-o'
       }
     },
-    upload_bucket: nil
+    upload_bucket: ENV['AWS_UPLOAD_BUCKET']
   }
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
