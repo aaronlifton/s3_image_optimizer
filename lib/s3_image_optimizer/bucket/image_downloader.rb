@@ -31,7 +31,7 @@ module S3ImageOptimizer::Bucket
     end
 
     def create_file(s3_object, key)
-      download_path = @options[:tmp_paths][:download_path]
+      download_path = @options[:tmp_download_path]
       @dir ||= FileUtils.mkdir_p(download_path)
       FileUtils.mkdir_p("#{download_path}/#{key.split('/')[0...-1].join('/')}")
       file = File.new("#{download_path}/#{key}",'w')

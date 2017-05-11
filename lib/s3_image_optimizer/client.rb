@@ -13,10 +13,7 @@ class S3ImageOptimizer::Client
     },
     bucket: nil,
     dir: ENV['AWS_BUCKET_DIR'],
-    tmp_paths: {
-      download_path: "/tmp/s3imageoptimizer/downloaded_images",
-      optimize_path: "/tmp/s3imageoptimizer/optimized_images"
-    },
+    tmp: "/tmp",
     optimize: {
       rename: {
         enabled: false,
@@ -32,6 +29,7 @@ class S3ImageOptimizer::Client
     elsif @options[:dir][-1] != '/'
       @options[:dir] += '/'
     end
+    @options[:tmp_download_path] = "#{@options[:tmp]}/s3imageoptimizer"
     raise ArgumentError.new("bucket is required") unless @options[:bucket]
     connect()
   end
@@ -72,6 +70,6 @@ class S3ImageOptimizer::Client
   end
 
   def cleanup
-    FileUtils.rm_rf Dir.glob("/tmp/s3imageoptimizer/*")
+    FileUtils.rm_rf Dir.glob("#{@options[:tmp]}/s3imageoptimizer/*")
   end
 end

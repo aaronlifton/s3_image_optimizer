@@ -30,13 +30,11 @@ class S3ImageOptimizer::ImageOptimizer
 
   def optimize_all(images = [])
     puts "\nOptimizing..."
-    optimized_path = @options[:tmp_paths][:optimize_path]
-    @dir ||= FileUtils.mkdir_p(optimized_path)
     @optimized_images = images.map do |i|
       original_path = i.path
       optimized_image = @image_optim.optimize_image(i)
       if optimized_image
-        new_path = "#{i.path.split('/')[0...-1].join('/')}".gsub("downloaded_images", "optimized_images")
+        new_path = "#{i.path.split('/')[0...-1].join('/')}"
         FileUtils.mkdir_p(new_path)
         mv_loc = File.join(new_path, rename(File.basename(i)))
         FileUtils.mv(optimized_image, mv_loc)

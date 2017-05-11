@@ -32,7 +32,7 @@ module S3ImageOptimizer::Bucket
       return unless image
       file_options = get_file_options(image)
       s3 = Aws::S3::Resource.new
-      k = image.split(@options[:tmp_paths][:optimize_path]).last[1..-1]
+      k = image.split(@options[:tmp_download_path]).last[1..-1]
 
       s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
       puts "Uploaded #{image}"

@@ -1,11 +1,19 @@
 #!/usr/bin/env ruby
 
 mode = ARGV.first
+bucket = ARGV[1]
+path = ARGV[2]
+
+task = if bucket
+  "rake optimize:[#{bucket},#{path}]"
+else
+  "rake optimize"
+end
 case mode
 when "optimize_daemon"
-  system "nohup rake optimize &"
+  system "nohup #{task} &"
 when "optimize"
-  exec "rake optimize"
+  exec task
 else
-  puts "Argument required!\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nHappy optimizing! ¯\\_(ツ)_/¯"
+  puts "Argument required!\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nArguments\n[bucket]          - optional bucket name\n[path]            - tmp path\n\nHappy optimizing! ¯\\_(ツ)_/¯"
 end

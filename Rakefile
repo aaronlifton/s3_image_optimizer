@@ -5,9 +5,15 @@ task :c do
   exec "pry -r s3_image_optimizer -I ./lib"
 end
 
-task :optimize do
+task :optimize, [:bucket, :path] do |t, args|
   require 's3_image_optimizer'
-  S3ImageOptimizer.optimize_bucket!({bucket: ENV['AWS_BUCKET'], dir: ENV['AWS_BUCKET_DIR'], upload_bucket: ENV['AWS_UPLOAD_BUCKET']})
+  bucket = args[:bucket] || ENV['AWS_BUCKET']
+  tmp = args[:path]
+  S3ImageOptimizer.optimize_bucket!({
+    bucket: bucket, dir: ENV['AWS_BUCKET_DIR'],
+    upload_bucket: ENV['AWS_UPLOAD_BUCKET'],
+    tmp: tmp
+    })
 end
 
 task :optimize_d do

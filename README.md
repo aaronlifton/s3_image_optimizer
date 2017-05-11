@@ -53,11 +53,14 @@ S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket', dir: 'images'})
 ## Use on command line
 
 ```
-s3imageoptimizer CMD
+s3imageoptimizer CMD [bucket]
 
 Available commands:
 [optimize_daemon] - run in background
 [optimize]        - run in foreground
+
+Arguments
+[bucket]          - optional bucket name
 
 Happy optimizing! ¯\_(ツ)_/¯
 ```
