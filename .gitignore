@@ -8,4 +8,5 @@
 /spec/reports/
 /tmp/
 .env
+*.gem
 nohup.out
