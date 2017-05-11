@@ -2,6 +2,11 @@
 
 ## Requirements
 
+OSX
+```
+brew install jpegoptim
+```
+
 Debin/Ubuntu
 ```
 sudo apt-get install -y jpegoptim
