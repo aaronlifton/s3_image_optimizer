@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+mode = ARGV.first
+case mode
+when "optimize_daemon"
+  system "nohup rake optimize &"
+when "optimize"
+  exec "rake optimize"
+else
+  puts "Argument required!\noptimize_daemon - run in background\noptimize - run in foreground\n\nHappy optimizing! ¯/\_(ツ)_/¯"
+end
