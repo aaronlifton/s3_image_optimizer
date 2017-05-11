@@ -20,21 +20,17 @@ class S3ImageOptimizer::ImageOptimizer
       pngout: false,
       pngquant: false,
       svgo: false
-    },
-    rename: {
-      append: '-o'
     }
   }.freeze
 
-  def initialize(options = {}, tmp_paths: nil)
+  def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
-    @tmp_paths = tmp_paths
     @image_optim = ImageOptim.new(@options[:image_optim])
   end
 
   def optimize_all(images = [])
     puts "\nOptimizing..."
-    optimized_path = @tmp_paths[:optimize_path]
+    optimized_path = @options[:tmp_paths][:optimize_path]
     @dir ||= FileUtils.mkdir_p(optimized_path)
     @optimized_images = images.map do |i|
       original_path = i.path
@@ -53,9 +49,13 @@ class S3ImageOptimizer::ImageOptimizer
   end
 
   def rename(filename)
-    if @options[:rename]
-      if @options[:rename][:append]
-        filename.split('.').first + @options[:rename][:append] + '.' + filename.split('.')[1..-1].join('.')
+    return filename unless @options[:optimize][:rename][:enabled]
+    if @options[:optimize][:rename]
+      if @options[:optimize][:rename][:append]
+        [
+          filename.split('.').first + @options[:optimize][:rename][:append],
+          filename.split('.')[1..-1].join('.')
+        ].join('.')
       else
         filename
       end

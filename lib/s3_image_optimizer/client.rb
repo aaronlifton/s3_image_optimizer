@@ -19,9 +19,11 @@ class S3ImageOptimizer::Client
     },
     optimize: {
       rename: {
+        enabled: false,
         append: '-o'
       }
-    }
+    },
+    upload_bucket: nil
   }
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
@@ -49,26 +51,21 @@ class S3ImageOptimizer::Client
     @s3_bucket = ::Aws::S3::Bucket.new(@options[:bucket], :client => @s3_client)
   end
 
-  def download_bucket_images(path = @options[:dir])
-    @image_collector = S3ImageOptimizer::Bucket::ImageCollector.new(@s3_bucket, path)
+  def download_bucket_images
+    @image_collector = S3ImageOptimizer::Bucket::ImageCollector.new(@s3_bucket, @options)
     @image_downloader = S3ImageOptimizer::Bucket::ImageDownloader.new(
       images: @image_collector.images, client: @s3_client, bucket: @s3_bucket,
-      path: path, tmp_paths: @options[:tmp_paths], optimize_opts: @options[:optimize]
+      options: @options
       )
   end
 
   def optimize_downloaded_images
-    @image_optimizer = S3ImageOptimizer::ImageOptimizer.new(@options[:optimize],
-      tmp_paths: @options[:tmp_paths]
-      )
+    @image_optimizer = S3ImageOptimizer::ImageOptimizer.new(@options)
     @image_optimizer.optimize_all(@image_downloader.downloaded_images)
   end
 
-  def upload_optimized_images(path = @options[:dir])
-    @image_uploader = S3ImageOptimizer::Bucket::ImageUploader.new(
-      client: @s3_client, bucket: @s3_bucket, path: path, tmp_paths: @options[:tmp_paths],
-
-      )
+  def upload_optimized_images
+    @image_uploader = S3ImageOptimizer::Bucket::ImageUploader.new(@s3_bucket, @options)
     @image_uploader.upload_all(@image_optimizer.optimized_images)
   end
 
