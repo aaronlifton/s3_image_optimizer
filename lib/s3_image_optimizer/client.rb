@@ -12,7 +12,7 @@ class S3ImageOptimizer::Client
       region: ENV['AWS_REGION'],
     },
     bucket: nil,
-    dir: nil,
+    dir: ENV['AWS_BUCKET_DIR'],
     tmp_paths: {
       download_path: "/tmp/s3imageoptimizer/downloaded_images",
       optimize_path: "/tmp/s3imageoptimizer/optimized_images"
