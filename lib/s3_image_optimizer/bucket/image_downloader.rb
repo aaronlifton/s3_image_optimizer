@@ -2,12 +2,12 @@ module S3ImageOptimizer::Bucket
   class ImageDownloader < Performer
     attr_accessor :downloaded_images
 
-    def initialize(images: [], client:, bucket:, path:, tmp_paths:, optimize_opts:)
-      super(bucket, path, tmp_paths)
+    def initialize(images: [], client:, bucket:, options: {})
+      super(bucket, options)
       @s3_client = client
       @images = images
       @downloaded_images = []
-      @optimize_opts = optimize_opts
+      @optimize_opts = @options[:optimize]
       download_images()
     end
 
@@ -31,7 +31,7 @@ module S3ImageOptimizer::Bucket
     end
 
     def create_file(s3_object, key)
-      download_path = @tmp_paths[:download_path]
+      download_path = @options[:tmp_paths][:download_path]
       @dir ||= FileUtils.mkdir_p(download_path)
       FileUtils.mkdir_p("#{download_path}/#{key.split('/')[0...-1].join('/')}")
       file = File.new("#{download_path}/#{key}",'w')
