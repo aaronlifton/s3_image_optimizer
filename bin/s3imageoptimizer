@@ -7,5 +7,5 @@ when "optimize_daemon"
 when "optimize"
   exec "rake optimize"
 else
-  puts "Argument required!\noptimize_daemon - run in background\noptimize - run in foreground\n\nHappy optimizing! ¯/\_(ツ)_/¯"
+  puts "Argument required!\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nHappy optimizing! ¯\\_(ツ)_/¯"
 end
