@@ -28,6 +28,12 @@ S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket'})
 S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket', dir: 'images'})
 ```
 
+## Use as daemon
+
+```
+rake optimize_d
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Run `rake c` for an interactive prompt.
