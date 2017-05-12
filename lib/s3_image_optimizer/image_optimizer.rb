@@ -28,7 +28,7 @@ class S3ImageOptimizer::ImageOptimizer
       pngcrush: false,
       pngquant: {
         allow_lossy: true,
-        quality: 10..100
+        quality: 10..100,
         speed: 3
       },
       pngout: false,
