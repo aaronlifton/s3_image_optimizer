@@ -38,10 +38,11 @@ class S3ImageOptimizer::ImageOptimizer
         FileUtils.mkdir_p(new_path)
         mv_loc = File.join(new_path, rename(File.basename(i)))
         FileUtils.mv(optimized_image, mv_loc)
-        puts "%-50s %s %40s" % ["#{i.path}", ('-'*3)+'>', mv_loc]
+        puts "%-50s %s %40s" % ["Optimizing #{i.path}", ('-'*3)+'>', mv_loc]
         mv_loc
       else
-        puts "Failed to optimize #{original_path}"
+        puts "Failed to optimize or already optimized #{original_path}"
+        mv_loc
       end
     end
   end

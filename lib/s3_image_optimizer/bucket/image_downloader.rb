@@ -14,6 +14,11 @@ module S3ImageOptimizer::Bucket
     def download_images
       puts "\nDownloading..."
       @images.select {|i| is_image?(i) && !is_already_optimized?(i) }.each do |i|
+        if File.exist?(File.join(@options[:tmp_download_path], i))
+          puts "Already downloaded #{i}"
+          @downloaded_images << File.open(File.join(@options[:tmp_download_path], i)) {|f|}
+          next
+        end
         s3_object = @s3_client.get_object({:key => i, :bucket => @bucket.name})
         @downloaded_images << create_file(s3_object.body, i)
       end
