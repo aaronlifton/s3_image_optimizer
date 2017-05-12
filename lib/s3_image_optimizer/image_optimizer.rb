@@ -33,10 +33,10 @@ class S3ImageOptimizer::ImageOptimizer
     @optimized_images = images.map do |i|
       original_path = i.path
       optimized_image = @image_optim.optimize_image(i)
+      new_path = "#{i.path.split('/')[0...-1].join('/')}"
+      mv_loc = File.join(new_path, rename(File.basename(i)))
       if optimized_image
-        new_path = "#{i.path.split('/')[0...-1].join('/')}"
         FileUtils.mkdir_p(new_path)
-        mv_loc = File.join(new_path, rename(File.basename(i)))
         FileUtils.mv(optimized_image, mv_loc)
         puts "%-50s %s %40s" % ["Optimizing #{i.path}", ('-'*3)+'>', mv_loc]
         mv_loc
