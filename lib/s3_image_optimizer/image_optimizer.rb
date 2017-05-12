@@ -7,8 +7,11 @@ class S3ImageOptimizer::ImageOptimizer
     image_optim: {
       skip_missing_workers: true,
       advpng: false,
-      gifsicle: false,
-      jhead: false,
+      gifsicle: {
+        level: 3,
+        careful: false
+      },
+      jhead: true,
       jpegoptim: {
         allow_lossy: true,
         max_quality: 50
@@ -16,7 +19,18 @@ class S3ImageOptimizer::ImageOptimizer
       jpegrecompress: false,
       jpegtran: false,
       optipng: false,
+      # pngcrush: {
+      #   chunks: :alla,
+      #   fix: false,
+      #   brute: false,
+      #   blacken: true
+      # },
       pngcrush: false,
+      pngquant: {
+        allow_lossy: true,
+        quality: 10..100
+        speed: 3
+      },
       pngout: false,
       pngquant: false,
       svgo: false
