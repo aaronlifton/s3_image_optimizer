@@ -11,7 +11,8 @@ module S3ImageOptimizer::Bucket
     }
 
 
-    def initialize(bucket, options = {})
+    def initialize(client, bucket, options = {})
+      @client = client
       super(bucket, DEFAULT_OPTIONS.merge(options))
       if @options[:upload_bucket]
         @upload_bucket = @options[:upload_bucket]
@@ -31,7 +32,7 @@ module S3ImageOptimizer::Bucket
     def upload_image(image)
       return unless image
       file_options = get_file_options(image)
-      s3 = Aws::S3::Resource.new
+      s3 = Aws::S3::Resource.new(client: @client)
       k = image.split(@options[:tmp_download_path]).last[1..-1]
 
       s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)

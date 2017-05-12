@@ -65,7 +65,7 @@ class S3ImageOptimizer::Client
   end
 
   def upload_optimized_images
-    @image_uploader = S3ImageOptimizer::Bucket::ImageUploader.new(@s3_bucket, @options)
+    @image_uploader = S3ImageOptimizer::Bucket::ImageUploader.new(@s3_client, @s3_bucket, @options)
     @image_uploader.upload_all(@image_optimizer.optimized_images)
   end
 
