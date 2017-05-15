@@ -10,3 +10,5 @@
 .env
 *.gem
 nohup.out
+uploaded.txt
+failed.txt

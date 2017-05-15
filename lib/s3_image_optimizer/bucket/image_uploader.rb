@@ -14,6 +14,17 @@ module S3ImageOptimizer::Bucket
     def initialize(credentials, bucket, options = {})
       super(bucket, DEFAULT_OPTIONS.merge(options))
       @client = ::Aws::S3::Client.new(credentials: credentials, region: @options[:aws][:region])
+
+      marker_file = "uploaded.txt"
+      if File.exists?(File.join(Dir.pwd, marker_file))
+        @uploaded_files = []
+        File.foreach(File.join(Dir.pwd, marker_file)) do |line|
+          @uploaded_files << line
+        end
+      end
+      @marker = File.open(File.join(Dir.pwd, marker_file), 'w')
+      @failed_marker = File.open(File.join(Dir.pwd, "failed.txt"), 'w')
+
       if @options[:upload_bucket] && !@options[:upload_bucket].empty?
         @upload_bucket = @options[:upload_bucket]
       else
@@ -37,9 +48,11 @@ module S3ImageOptimizer::Bucket
 
       if s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
         puts "Uploaded #{image}"
+        File.open(@marker, 'a') { |f| f << image }
         true
       else
         puts "Failed to upload #{image}"
+        File.open(@failed_marker, 'a') { |f| f << image }
         false
       end
     end
