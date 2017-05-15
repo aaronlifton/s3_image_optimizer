@@ -55,11 +55,11 @@ module S3ImageOptimizer::Bucket
 
       if s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
         puts "Uploaded #{image}"
-        File.open(File.join(Dir.pwd, @marker_file), 'a') { |f| f << image }
+        File.open(File.join(Dir.pwd, @marker_file), 'a') { |f| f << image + "\n" }
         true
       else
         puts "Failed to upload #{image}"
-        File.open(File.join(Dir.pwd, @failed_marker_file), 'a') { |f| f << image }
+        File.open(File.join(Dir.pwd, @failed_marker_file), 'a') { |f| f << image + "\n" }
         false
       end
     end
