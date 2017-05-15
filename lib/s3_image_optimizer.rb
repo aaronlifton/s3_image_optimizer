@@ -14,5 +14,11 @@ module S3ImageOptimizer
       client = S3ImageOptimizer::Client.new(options)
       client.optimize!
     end
+
+    def upload_all!(options = {})
+      options = DEFAULT_OPTIONS.merge(options)
+      client = S3ImageOptimizer::Client.new(options)
+      client.upload_optimized_images
+    end
   end
 end
