@@ -37,6 +37,6 @@ else
     Arguments
     [bucket]          - optional bucket name
     [path]            - tmp path\n
-    Happy optimizing! ¯\\_(ツ)_/¯"
+    Happy optimizing! ¯\\_(ツ)_/¯
   }
 end
