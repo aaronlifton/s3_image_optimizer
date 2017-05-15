@@ -26,11 +26,11 @@ class S3ImageOptimizer::ImageOptimizer
       #   blacken: true
       # },
       pngcrush: false,
-      pngquant: {
-        allow_lossy: true,
-        quality: 10..100,
-        speed: 3
-      },
+      # pngquant: {
+      #   allow_lossy: true,
+      #   quality: 10..100,
+      #   speed: 3
+      # },
       pngout: false,
       pngquant: false,
       svgo: false
@@ -61,12 +61,28 @@ class S3ImageOptimizer::ImageOptimizer
     end
   end
 
-  def rename(filename)
-    return filename unless @options[:optimize][:rename][:enabled]
-    if @options[:optimize][:rename]
-      if @options[:optimize][:rename][:append]
+  def optimize_image(image)
+    puts "\nOptimizing..."
+    original_path = image
+    optimized_image = @image_optim.optimize_image(image)
+    mv_loc = original_path
+    if optimized_image
+      FileUtils.mv(optimized_image, mv_loc)
+      puts "%-50s %s %40s" % ["Optimizing #{image}", ('-'*3)+'>', mv_loc]
+      mv_loc
+    else
+      puts "Failed to optimize or already optimized #{original_path}"
+      mv_loc
+    end
+  end
+
+  def rename(filename, options = {})
+    options = @options.merge(options)
+    return filename unless options[:optimize] && options[:optimize][:rename][:enabled]
+    if options[:optimize][:rename]
+      if options[:optimize][:rename][:append]
         [
-          filename.split('.').first + @options[:optimize][:rename][:append],
+          filename.split('.').first + options[:optimize][:rename][:append],
           filename.split('.')[1..-1].join('.')
         ].join('.')
       else

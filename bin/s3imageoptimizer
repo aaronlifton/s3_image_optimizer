@@ -22,6 +22,21 @@ when "upload"
   S3ImageOptimizer.upload_all!(options)
 when "upload_daemon"
   system "nohup s3imageoptimizer upload #{bucket} #{path} &"
+when "optimize_dir"
+  S3ImageOptimizer.optimize_dir!((bucket || Dir.pwd))
 else
-  puts "Command required!\ns3imageoptimizer [command] [arg1] [arg2]\n\nCommands\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nArguments\n[bucket]          - optional bucket name\n[path]            - tmp path\n\nHappy optimizing! ¯\\_(ツ)_/¯"
+  puts %{Command required!
+    s3imageoptimizer [command] [bucket] [path]\n
+    Commands
+    [optimize_daemon] - run in background
+    [optimize]        - run in foreground
+    [upload]          - upload downloaded/optimized images
+    [upload_daemon]   - upload in background
+    [optimize_dir]    - optimize images in current or specified directory
+    [help]            - show this message\n
+    Arguments
+    [bucket]          - optional bucket name
+    [path]            - tmp path\n
+    Happy optimizing! ¯\\_(ツ)_/¯"
+  }
 end
