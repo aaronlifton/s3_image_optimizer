@@ -5,16 +5,16 @@ mode = ARGV.first
 bucket = ARGV[1]
 path = ARGV[2]
 
-task = if bucket
-  "rake optimize[#{bucket},#{path}]"
-else
-  "rake optimize"
-end
 case mode
 when "optimize_daemon"
-  system "nohup #{task} &"
+  system "nohup s3imageoptimizer optimize &"
 when "optimize"
-  exec task
+  bucket ||= ENV['AWS_BUCKET']
+  S3ImageOptimizer.optimize_bucket!({
+    bucket: bucket, dir: ENV['AWS_BUCKET_DIR'],
+    upload_bucket: ENV['AWS_UPLOAD_BUCKET'],
+    tmp: path
+    })
 else
   puts "Command required!\ns3imageoptimizer [command] [arg1] [arg2]\n\nCommands\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nArguments\n[bucket]          - optional bucket name\n[path]            - tmp path\n\nHappy optimizing! ¯\\_(ツ)_/¯"
 end

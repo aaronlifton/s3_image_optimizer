@@ -11,9 +11,9 @@ module S3ImageOptimizer::Bucket
     }
 
 
-    def initialize(client, bucket, options = {})
-      @client = client
+    def initialize(credentials, bucket, options = {})
       super(bucket, DEFAULT_OPTIONS.merge(options))
+      @client = ::Aws::S3::Client.new(credentials: credentials, region: @options[:aws][:region])
       if @options[:upload_bucket]
         @upload_bucket = @options[:upload_bucket]
       else
@@ -32,11 +32,13 @@ module S3ImageOptimizer::Bucket
     def upload_image(image)
       return unless image
       file_options = get_file_options(image)
-      s3 = Aws::S3::Resource.new(client: @client)
-      k = image.split(@options[:tmp_download_path]).last[1..-1]
+      s3 = Aws::S3::Resource.new(client: @client, region: @options[:aws][:region])
+      k = image.split("#{@options[:tmp_download_path]}/s3imageoptimizer").last[1..-1]
 
-      s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
-      puts "Uploaded #{image}"
+      if s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
+        puts "Uploaded #{image}"
+      else
+        puts "Failed to upload #{image}"
     end
 
     def get_file_options(image)

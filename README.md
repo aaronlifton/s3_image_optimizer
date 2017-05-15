@@ -9,7 +9,7 @@ $ brew install jpegoptim
 
 Debin/Ubuntu
 ```
-$ sudo apt-get install -y jpegoptim
+$ sudo apt-get install -y jpegoptim gifsicle jhead pngquant
 ```
 
 Other
