@@ -16,8 +16,8 @@ module S3ImageOptimizer::Bucket
       @client = ::Aws::S3::Client.new(credentials: credentials, region: @options[:aws][:region])
 
       marker_file = "uploaded.txt"
+      @uploaded_files = []
       if File.exists?(File.join(Dir.pwd, marker_file))
-        @uploaded_files = []
         File.foreach(File.join(Dir.pwd, marker_file)) do |line|
           @uploaded_files << line
         end
@@ -42,6 +42,10 @@ module S3ImageOptimizer::Bucket
 
     def upload_image(image)
       return unless image
+      if @uploaded_files.include?(image)
+        puts "Already uploaded #{image}"
+        return false
+      end
       file_options = get_file_options(image)
       s3 = Aws::S3::Resource.new(client: @client, region: @options[:aws][:region])
       k = image.split(@options[:tmp_download_path]).last[1..-1]
