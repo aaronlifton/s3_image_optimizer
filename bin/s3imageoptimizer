@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
+require 's3_image_optimizer'
+
 mode = ARGV.first
 bucket = ARGV[1]
 path = ARGV[2]
 
 options = {
-  bucket: bucket, dir: ENV['AWS_BUCKET_DIR'],
+  bucket: (bucket || ENV['AWS_BUCKET']), dir: ENV['AWS_BUCKET_DIR'],
   upload_bucket: ENV['AWS_UPLOAD_BUCKET'],
   tmp: path
 }
@@ -15,12 +17,11 @@ case mode
 when "optimize_daemon"
   system "nohup s3imageoptimizer optimize &"
 when "optimize"
-  bucket ||= ENV['AWS_BUCKET']
   S3ImageOptimizer.optimize_bucket!(options)
 when "upload"
-  S3ImageOptimizer.upload_all!({options)
+  S3ImageOptimizer.upload_all!(options)
 when "upload_daemon"
-  system "nohup s3imageoptimizer upload &"
+  system "nohup s3imageoptimizer upload #{bucket} #{path} &"
 else
   puts "Command required!\ns3imageoptimizer [command] [arg1] [arg2]\n\nCommands\n[optimize_daemon] - run in background\n[optimize]        - run in foreground\n\nArguments\n[bucket]          - optional bucket name\n[path]            - tmp path\n\nHappy optimizing! ¯\\_(ツ)_/¯"
 end

@@ -48,7 +48,7 @@ class S3ImageOptimizer::Client
 
   def connect
     @s3_client = ::Aws::S3::Client.new(credentials: credentials, region: @options[:aws][:region])
-    @s3_bucket = ::Aws::S3::Bucket.new(@options[:bucket], client: @s3_client)
+    @s3_bucket = ::Aws::S3::Bucket.new(@options[:bucket], client: @s3_client, region: @options[:aws][:region])
   end
 
   def download_bucket_images
