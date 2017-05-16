@@ -21,7 +21,7 @@ module S3ImageOptimizer::Bucket
         File.foreach(File.join(Dir.pwd, @marker_file)) do |line|
           @uploaded_files << line
         end
-        @marker = File.open(File.join(Dir.pwd, @marker_file), 'w') {|f| f }
+        # @marker = File.open(File.join(Dir.pwd, @marker_file), 'w') {|f| f }
       else
         @marker = File.open(File.join(Dir.pwd, @marker_file), 'w') {|f| f.write('') }
       end
@@ -45,7 +45,7 @@ module S3ImageOptimizer::Bucket
 
     def upload_image(image)
       return unless image
-      if @uploaded_files.include?(image)
+      if @uploaded_files.include?(image + "\n")
         puts "Already uploaded #{image}"
         return false
       end
@@ -76,8 +76,11 @@ module S3ImageOptimizer::Bucket
     def get_content_type(file)
       typ = nil
       File.open(file, 'r') do |f|
-        mime_magic = MimeMagic.by_magic(f)
-        typ = mime_magic.type if mime_magic
+        begin
+          mime_magic = MimeMagic.by_magic(f)
+          typ = mime_magic.type if mime_magic
+        rescue
+        end
       end
       typ
     end
