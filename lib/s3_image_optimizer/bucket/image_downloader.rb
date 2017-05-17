@@ -9,6 +9,7 @@ module S3ImageOptimizer::Bucket
       @downloaded_images = []
       @optimize_opts = @options[:optimize]
       @marker_file = "downloaded.txt"
+      @downloaded_files = []
       if File.exists?(File.join(Dir.pwd, @marker_file))
         File.foreach(File.join(Dir.pwd, @marker_file)) do |line|
           @downloaded_files << line

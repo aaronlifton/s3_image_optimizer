@@ -48,8 +48,8 @@ class S3ImageOptimizer::ImageOptimizer
     @image_optim = ImageOptim.new(@options[:image_optim])
     if @options[:nice_settings]
       @options[:nice_image_optim][:jpegoptim] = {
-        allow_lossy: @options[:nice_settings][:lossy] == "true"
-        max_quality: @options[:nice_settings][:quality].to_i
+        allow_lossy: @options[:nice_settings][:lossy]
+        max_quality: @options[:nice_settings][:quality]
       }
     end
     @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
