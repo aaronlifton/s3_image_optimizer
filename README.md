@@ -53,16 +53,29 @@ S3ImageOptimizer.optimize_bucket!({bucket: 'my-bucket', dir: 'images'})
 ## Use on command line
 
 ```
-$ s3imageoptimizer optimize_daemon my-bucket /mnt
+$ s3imageoptimizer [command] bucket=my_bucket tmp=/tmp ...
 
-s3imageoptimizer CMD [bucket]
+    Commands
+    [optimize_daemon]   - run in background
+    [optimize]          - run in foreground
+    [upload]            - upload downloaded/optimized images
+    [upload_daemon]     - upload in background
+    [optimize_dir]      - optimize images in current or specified directory
+    [dir]               - specify dir for optimize_dir
+    [help]              - show this message
 
-Available commands:
-[optimize_daemon] - run in background
-[optimize]        - run in foreground
+    Arguments
+    [bucket]            - bucket name
+    [tmp]               - tmp path
+    [key_contains]      - only download keys that include
+    [only_filenames]    - x.jpg
+    [upload_bucket]     - upload bucket name
+    [tmp_download_path] - download path for upload mode
+    [skip_filenames]    - x.jpg, y.jpg
 
-Arguments
-[bucket]          - optional bucket name
+    [only_nice]         - false, nice settings for only_filenames
+    [settings]          - lossy:true,quality:50
+    [nice_settings]     - lossy:true,quality:75
 
 Happy optimizing! ¯\_(ツ)_/¯
 ```

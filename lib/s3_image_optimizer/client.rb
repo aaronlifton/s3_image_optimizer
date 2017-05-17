@@ -86,5 +86,6 @@ class S3ImageOptimizer::Client
 
   def cleanup
     FileUtils.rm_rf Dir.glob("#{@options[:tmp]}/s3imageoptimizer/*")
+    FileUtils.rm(Dir.pwd + "/downloaded.txt")
   end
 end
