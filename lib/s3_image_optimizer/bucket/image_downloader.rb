@@ -8,6 +8,14 @@ module S3ImageOptimizer::Bucket
       @images = images
       @downloaded_images = []
       @optimize_opts = @options[:optimize]
+      @marker_file = "downloaded.txt"
+      if File.exists?(File.join(Dir.pwd, @marker_file))
+        File.foreach(File.join(Dir.pwd, @marker_file)) do |line|
+          @downloaded_files << line
+        end
+      else
+        @marker = File.open(File.join(Dir.pwd, @marker_file), 'w') {|f| f.write('') }
+      end
       download_images()
     end
 
@@ -21,6 +29,7 @@ module S3ImageOptimizer::Bucket
         end
         s3_object = @s3_client.get_object({:key => i, :bucket => @bucket.name})
         @downloaded_images << create_file(s3_object.body, i)
+        File.open(File.join(Dir.pwd, @marker_file), 'a') { |f| f << i + "\n" }
       end
     end
 

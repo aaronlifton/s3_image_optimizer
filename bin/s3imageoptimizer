@@ -16,7 +16,7 @@ if ARGV[1..-1]
     if opt.length == 2
       k = opt[0].to_sym
       v = opt[1]
-      if ["key_contains", "only_filenames", "skip_filenames"].include?(k)
+      if [:key_contains, :only_filenames, :skip_filenames].include?(k)
         v = v.split(',')
       end
       options[k] = v

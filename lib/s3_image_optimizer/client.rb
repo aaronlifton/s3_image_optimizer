@@ -27,7 +27,7 @@ class S3ImageOptimizer::Client
   }
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
-    if @options[:dir].empty?
+    if @options[:dir] && @options[:dir].empty?
       @options[:dir] = nil
     elsif @options[:dir][-1] != '/'
       @options[:dir] += '/'
