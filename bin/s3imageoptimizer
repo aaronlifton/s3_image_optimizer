@@ -11,11 +11,15 @@ options = {
   tmp: "/tmp"
 }
 if ARGV[1..-1]
-  puts ARGV[1..-1]
   ARGV[1..-1].each do |a|
     opt = a.split("=")
     if opt.length == 2
-      options[opt[0].to_sym] = opt[1]
+      k = opt[0].to_sym
+      v = opt[1]
+      if ["key_contains", "only_filenames", "skip_filenames"].include?(k)
+        v = v.split(',')
+      end
+      options[k] = v
     end
   end
 end
@@ -36,18 +40,20 @@ else
   puts %{Command required!
     s3imageoptimizer [command] bucket=my_bucket tmp=/tmp ...\n
     Commands
-    [optimize_daemon] - run in background
-    [optimize]        - run in foreground
-    [upload]          - upload downloaded/optimized images
-    [upload_daemon]   - upload in background
-    [optimize_dir]    - optimize images in current or specified directory
-    [help]            - show this message\n
+    [optimize_daemon]   - run in background
+    [optimize]          - run in foreground
+    [upload]            - upload downloaded/optimized images
+    [upload_daemon]     - upload in background
+    [optimize_dir]      - optimize images in current or specified directory
+    [help]              - show this message\n
     Arguments
-    [bucket]          - bucket name
-    [tmp]             - tmp path
-    [only_filenames]  - x.jpg
-    [upload_bucket]   - upload bucket name
-    [skip_filenames]  - x.jpg, y.jpg\n
+    [bucket]            - bucket name
+    [tmp]               - tmp path
+    [key_contains]      - only download keys that include
+    [only_filenames]    - x.jpg
+    [upload_bucket]     - upload bucket name
+    [tmp_download_path] - download path for upload mode
+    [skip_filenames]    - x.jpg, y.jpg\n
     Happy optimizing! ¯\\_(ツ)_/¯
   }
 end
