@@ -44,7 +44,7 @@ class S3ImageOptimizer::ImageOptimizer
   }.freeze
 
   def initialize(options = {})
-    @options = DEFAULT_OPTIONS.merge(options)
+    @options = options.merge(DEFAULT_OPTIONS)
     @image_optim = ImageOptim.new(@options[:image_optim])
     @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
   end
