@@ -38,7 +38,7 @@ class S3ImageOptimizer::ImageOptimizer
     nice_image_optim: {
       jpegoptim: {
         allow_lossy: true,
-        max_quality: 85
+        max_quality: 75
       }
     }
   }.freeze

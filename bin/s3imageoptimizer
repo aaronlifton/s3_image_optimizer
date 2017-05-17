@@ -72,7 +72,7 @@ else
     [skip_filenames]    - x.jpg, y.jpg\n
     [only_nice]         - false, nice settings for only_filenames
     [settings]          - lossy:true,quality:50
-    [nice_settings]     - lossy:true,quality:85
+    [nice_settings]     - lossy:true,quality:75
     Happy optimizing! ¯\\_(ツ)_/¯
   }
 end
