@@ -34,19 +34,30 @@ class S3ImageOptimizer::ImageOptimizer
       pngout: false,
       pngquant: false,
       svgo: false
+    },
+    nice_image_optim: {
+      jpegoptim: {
+        allow_lossy: true,
+        max_quality: 75
+      }
     }
   }.freeze
 
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
     @image_optim = ImageOptim.new(@options[:image_optim])
+    @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
   end
 
   def optimize_all(images = [])
     puts "\nOptimizing..."
     @optimized_images = images.map do |i|
       original_path = i.path
-      optimized_image = @image_optim.optimize_image(i)
+      if @options[:nice_filenames].include?(i.path.split('/').last)
+        optimized_image = @nice_image_optim.optimize_image(i)
+      else
+        optimized_image = @image_optim.optimize_image(i)
+      end
       new_path = "#{i.path.split('/')[0...-1].join('/')}"
       mv_loc = File.join(new_path, rename(File.basename(i)))
       if optimized_image

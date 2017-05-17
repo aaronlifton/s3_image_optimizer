@@ -21,9 +21,9 @@ module S3ImageOptimizer
       client.upload_optimized_images
     end
 
-    def optimize_dir!(path = Dir.pwd)
+    def optimize_dir!(path = Dir.pwd, options = {})
       images = Dir.glob("#{path}/**/*.*")
-      @image_optimizer = S3ImageOptimizer::ImageOptimizer.new
+      @image_optimizer = S3ImageOptimizer::ImageOptimizer.new(options)
       images.each do |i|
         @image_optimizer.optimize_image(i)
       end

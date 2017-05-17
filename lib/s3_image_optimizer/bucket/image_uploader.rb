@@ -6,7 +6,7 @@ module S3ImageOptimizer::Bucket
 
     DEFAULT_OPTIONS = {
       aws: {
-        acl: ENV['AWS_ACL'] || nil
+        acl: ENV['AWS_ACL'] || 'public-read'
       }
     }
 
@@ -41,6 +41,7 @@ module S3ImageOptimizer::Bucket
       @uploaded_images = images.each do |i|
         upload_image(i)
       end
+      puts "\nDone!"
     end
 
     def upload_image(image)
@@ -52,16 +53,23 @@ module S3ImageOptimizer::Bucket
       file_options = get_file_options(image)
       s3 = Aws::S3::Resource.new(client: @client, region: @options[:aws][:region])
       k = image.split(@options[:tmp_download_path]).last[1..-1]
-
-      if s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
-        puts "Uploaded #{image}"
-        File.open(File.join(Dir.pwd, @marker_file), 'a') { |f| f << image + "\n" }
-        true
-      else
-        puts "Failed to upload #{image}"
-        File.open(File.join(Dir.pwd, @failed_marker_file), 'a') { |f| f << image + "\n" }
-        false
+      begin
+        if s3.bucket(@upload_bucket).object(k).upload_file(image, file_options)
+          puts "Uploaded #{image}"
+          File.open(File.join(Dir.pwd, @marker_file), 'a') { |f| f << image + "\n" }
+          true
+        else
+          handle_failure(image)
+        end
+      rescue
+        handle_failure(image)
       end
+    end
+
+    def handle_failure(image)
+      puts "Failed to upload #{image}"
+      File.open(File.join(Dir.pwd, @failed_marker_file), 'a') { |f| f << image + "\n" }
+      false
     end
 
     def get_file_options(image)
