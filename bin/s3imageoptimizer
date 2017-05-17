@@ -39,39 +39,38 @@ if ARGV[1..-1]
     end
   end
 end
-puts options
 
-# case mode
-# when "optimize_daemon"
-#   system "nohup s3imageoptimizer optimize &"
-# when "optimize"
-#   S3ImageOptimizer.optimize_bucket!(options)
-# when "upload"
-#   S3ImageOptimizer.upload_all!(options)
-# when "upload_daemon"
-#   system "nohup s3imageoptimizer upload #{bucket} #{path} &"
-# when "optimize_dir"
-#   S3ImageOptimizer.optimize_dir!((bucket || Dir.pwd))
-# else
-#   puts %{Command required!
-#     s3imageoptimizer [command] bucket=my_bucket tmp=/tmp ...\n
-#     Commands
-#     [optimize_daemon]   - run in background
-#     [optimize]          - run in foreground
-#     [upload]            - upload downloaded/optimized images
-#     [upload_daemon]     - upload in background
-#     [optimize_dir]      - optimize images in current or specified directory
-#     [help]              - show this message\n
-#     Arguments
-#     [bucket]            - bucket name
-#     [tmp]               - tmp path
-#     [key_contains]      - only download keys that include
-#     [only_filenames]    - x.jpg
-#     [upload_bucket]     - upload bucket name
-#     [tmp_download_path] - download path for upload mode
-#     [skip_filenames]    - x.jpg, y.jpg\n
-#     [only_nice]         - false, nice settings for only_filenames
-#     [nice_settings]     - lossy:true,quality:85
-#     Happy optimizing! ¯\\_(ツ)_/¯
-#   }
-# end
+case mode
+when "optimize_daemon"
+  system "nohup s3imageoptimizer optimize &"
+when "optimize"
+  S3ImageOptimizer.optimize_bucket!(options)
+when "upload"
+  S3ImageOptimizer.upload_all!(options)
+when "upload_daemon"
+  system "nohup s3imageoptimizer upload #{bucket} #{path} &"
+when "optimize_dir"
+  S3ImageOptimizer.optimize_dir!((bucket || Dir.pwd))
+else
+  puts %{Command required!
+    s3imageoptimizer [command] bucket=my_bucket tmp=/tmp ...\n
+    Commands
+    [optimize_daemon]   - run in background
+    [optimize]          - run in foreground
+    [upload]            - upload downloaded/optimized images
+    [upload_daemon]     - upload in background
+    [optimize_dir]      - optimize images in current or specified directory
+    [help]              - show this message\n
+    Arguments
+    [bucket]            - bucket name
+    [tmp]               - tmp path
+    [key_contains]      - only download keys that include
+    [only_filenames]    - x.jpg
+    [upload_bucket]     - upload bucket name
+    [tmp_download_path] - download path for upload mode
+    [skip_filenames]    - x.jpg, y.jpg\n
+    [only_nice]         - false, nice settings for only_filenames
+    [nice_settings]     - lossy:true,quality:85
+    Happy optimizing! ¯\\_(ツ)_/¯
+  }
+end
