@@ -38,7 +38,7 @@ class S3ImageOptimizer::ImageOptimizer
     nice_image_optim: {
       jpegoptim: {
         allow_lossy: true,
-        max_quality: 75
+        max_quality: 85
       }
     }
   }.freeze
@@ -46,6 +46,12 @@ class S3ImageOptimizer::ImageOptimizer
   def initialize(options = {})
     @options = options.merge(DEFAULT_OPTIONS)
     @image_optim = ImageOptim.new(@options[:image_optim])
+    if @options[:nice_settings]
+      @options[:nice_image_optim][:jpegoptim] = {
+        allow_lossy: @options[:nice_settings][:lossy] == "true"
+        max_quality: @options[:nice_settings][:quality].to_i
+      }
+    end
     @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
   end
 
@@ -58,7 +64,13 @@ class S3ImageOptimizer::ImageOptimizer
         }
         next
       else
-        optimized_image = @image_optim.optimize_image(i)
+        if @options[:only_filenames].any { |str|
+          str.include?(File.basename(i))
+          } && @options[:only_nice]
+          optimized_image = @nice_image_optim.optimize_image(i)
+        else
+          optimized_image = @image_optim.optimize_image(i)
+        end
       end
       new_path = "#{i.path.split('/')[0...-1].join('/')}"
       mv_loc = File.join(new_path, rename(File.basename(i)))

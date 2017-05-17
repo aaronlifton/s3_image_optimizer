@@ -19,7 +19,18 @@ if ARGV[1..-1]
       if [:key_contains, :only_filenames, :skip_filenames].include?(k)
         v = v.split(',')
       end
-      options[k] = v
+      if k == "nice_settings"
+        settings = v.split(',').map { |s| s.split(':') }
+        nice_settings = {}
+        settings.each do |setting|
+          nice_settings[setting[0].to_sym] = setting[1]
+        end
+        options[k] = nice_settings
+      elsif k == "only_nice"
+        options[k] = v == "true"
+      else
+        options[k] = v
+      end
     end
   end
 end
@@ -54,6 +65,8 @@ else
     [upload_bucket]     - upload bucket name
     [tmp_download_path] - download path for upload mode
     [skip_filenames]    - x.jpg, y.jpg\n
+    [only_nice]         - false, nice settings for only_filenames
+    [nice_settings]     - lossy:true,quality:85
     Happy optimizing! ¯\\_(ツ)_/¯
   }
 end
