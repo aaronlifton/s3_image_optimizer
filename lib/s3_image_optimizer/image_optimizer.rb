@@ -46,13 +46,24 @@ class S3ImageOptimizer::ImageOptimizer
   def initialize(options = {})
     @options = options.merge(DEFAULT_OPTIONS)
     @image_optim = ImageOptim.new(@options[:image_optim])
-    if @options[:nice_settings]
-      @options[:nice_image_optim][:jpegoptim] = {
-        allow_lossy: @options[:nice_settings][:lossy],
-        max_quality: @options[:nice_settings][:quality]
-      }
-    end
+    set_settings
     @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
+  end
+
+  def set_settings
+    [:settings, :nice_settings].each do |k|
+      if @options[k]
+        key = if k.split('settings').length > 1
+          k.split('settings').first + "image_optim"
+        else
+          "image_optim"
+        end
+        @options[key.to_sym][:jpegoptim] = {
+          allow_lossy: @options[k][:lossy],
+          max_quality: @options[k][:quality]
+        }
+      end
+    end
   end
 
   def optimize_all(images = [])
@@ -64,7 +75,7 @@ class S3ImageOptimizer::ImageOptimizer
         }
         next
       else
-        if @options[:only_filenames].any { |str|
+        if @options[:only_filenames].any? { |str|
           str.include?(File.basename(i))
           } && @options[:only_nice]
           optimized_image = @nice_image_optim.optimize_image(i)

@@ -19,18 +19,18 @@ if ARGV[1..-1]
       if [:key_contains, :only_filenames, :skip_filenames].include?(k)
         v = v.split(',')
       end
-      if k == :nice_settings
+      if [:settings, :nice_settings].include?(k)
         settings = v.split(',').map { |s| s.split(':') }
-        nice_settings = {}
+        settings_h = {}
         settings.each do |setting|
           if setting[0] == "lossy"
             setting[1] = setting[1] == "true"
           elsif setting[0] == "quality"
             setting[1] = setting[1].to_i
           end
-          nice_settings[setting[0].to_sym] = setting[1]
+          settings_h[setting[0].to_sym] = setting[1]
         end
-        options[k] = nice_settings
+        options[k] = settings_h
       elsif k == :only_nice
         options[k] = v == "true"
       else
@@ -70,6 +70,7 @@ else
     [tmp_download_path] - download path for upload mode
     [skip_filenames]    - x.jpg, y.jpg\n
     [only_nice]         - false, nice settings for only_filenames
+    [settings]          - lossy:true,quality:50
     [nice_settings]     - lossy:true,quality:85
     Happy optimizing! ¯\\_(ツ)_/¯
   }
