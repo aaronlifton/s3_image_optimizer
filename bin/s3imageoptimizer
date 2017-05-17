@@ -4,14 +4,22 @@
 require 's3_image_optimizer'
 
 mode = ARGV.first
-bucket = ARGV[1]
-path = ARGV[2]
 
 options = {
-  bucket: (bucket || ENV['AWS_BUCKET']), dir: ENV['AWS_BUCKET_DIR'],
+  bucket: ENV['AWS_BUCKET'], dir: ENV['AWS_BUCKET_DIR'],
   upload_bucket: ENV['AWS_UPLOAD_BUCKET'],
-  tmp: path
+  tmp: "/tmp"
 }
+if ARGV[1..-1]
+  puts ARGV[1..-1]
+  ARGV[1..-1].each do |a|
+    opt = a.split("=")
+    if opt.length == 2
+      options[opt[0].to_sym] = opt[1]
+    end
+  end
+end
+
 
 case mode
 when "optimize_daemon"
@@ -26,7 +34,7 @@ when "optimize_dir"
   S3ImageOptimizer.optimize_dir!((bucket || Dir.pwd))
 else
   puts %{Command required!
-    s3imageoptimizer [command] [bucket] [path]\n
+    s3imageoptimizer [command] bucket=my_bucket tmp=/tmp ...\n
     Commands
     [optimize_daemon] - run in background
     [optimize]        - run in foreground
@@ -35,8 +43,11 @@ else
     [optimize_dir]    - optimize images in current or specified directory
     [help]            - show this message\n
     Arguments
-    [bucket]          - optional bucket name
-    [path]            - tmp path\n
+    [bucket]          - bucket name
+    [tmp]             - tmp path
+    [only_filenames]  - x.jpg
+    [upload_bucket]   - upload bucket name
+    [skip_filenames]  - x.jpg, y.jpg\n
     Happy optimizing! ¯\\_(ツ)_/¯
   }
 end

@@ -11,6 +11,11 @@ module S3ImageOptimizer::Bucket
 
     def collect_images(prefix)
       @images = @bucket.objects(:prefix => prefix).map(&:key)
+      if @options[:only_filenames]
+        @images = @images.select {|i| @options[:only_filenames].include?(File.basename(i))}
+      else
+        @images
+      end
     end
   end
 end

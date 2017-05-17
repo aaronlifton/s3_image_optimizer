@@ -21,7 +21,8 @@ class S3ImageOptimizer::Client
       }
     },
     upload_bucket: ENV['AWS_UPLOAD_BUCKET'],
-    skip_filenames: (ENV['S3IO_SKIP_FILENAMES'] ? ENV['S3IO_SKIP_FILENAMES'].split(',') : [])
+    skip_filenames: (ENV['S3IO_SKIP_FILENAMES'] ? ENV['S3IO_SKIP_FILENAMES'].split(',') : []),
+    only_filenames: (ENV['S3IO_ONLY_FILENAMES'] ? ENV['S3IO_ONLY_FILENAMES'].split(',') : []),
   }
   def initialize(options = {})
     @options = DEFAULT_OPTIONS.merge(options)
