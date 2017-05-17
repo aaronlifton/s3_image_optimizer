@@ -50,7 +50,7 @@ when "upload"
 when "upload_daemon"
   system "nohup s3imageoptimizer upload #{bucket} #{path} &"
 when "optimize_dir"
-  S3ImageOptimizer.optimize_dir!((bucket || Dir.pwd))
+  S3ImageOptimizer.optimize_dir!((options[:dir] || Dir.pwd), options)
 else
   puts %{Command required!
     s3imageoptimizer [command] bucket=my_bucket tmp=/tmp ...\n
@@ -60,6 +60,7 @@ else
     [upload]            - upload downloaded/optimized images
     [upload_daemon]     - upload in background
     [optimize_dir]      - optimize images in current or specified directory
+    [dir]               - specify dir for optimize_dir
     [help]              - show this message\n
     Arguments
     [bucket]            - bucket name

@@ -45,16 +45,17 @@ class S3ImageOptimizer::ImageOptimizer
 
   def initialize(options = {})
     @options = options.merge(DEFAULT_OPTIONS)
-    @image_optim = ImageOptim.new(@options[:image_optim])
     set_settings
+    puts @options
+    @image_optim = ImageOptim.new(@options[:image_optim])
     @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
   end
 
   def set_settings
     [:settings, :nice_settings].each do |k|
       if @options[k]
-        key = if k.split('settings').length > 1
-          k.split('settings').first + "image_optim"
+        key = if k.to_s.split('settings').length > 1
+          k.to_s.split('settings').first + "image_optim"
         else
           "image_optim"
         end
