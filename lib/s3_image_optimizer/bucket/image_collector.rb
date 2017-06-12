@@ -11,14 +11,14 @@ module S3ImageOptimizer::Bucket
 
     def collect_images(prefix)
       @images = @bucket.objects(:prefix => prefix).map(&:key)
-      if @options[:key_contains]
+      if @options[:key_contains].any?
         @images = @images.select { |i|
           @options[:key_contains].any? { |str|
             i.include?(str)
           }
         }
       end
-      if @options[:only_filenames]
+      if @options[:only_filenames].any?
         @images = @images.select { |i|
           @options[:only_filenames].any? { |str|
             str.include?(File.basename(i))

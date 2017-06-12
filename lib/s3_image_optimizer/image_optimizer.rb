@@ -72,12 +72,12 @@ class S3ImageOptimizer::ImageOptimizer
     puts "\nOptimizing..."
     @optimized_images = images.map do |i|
       original_path = i.path
-      if @options[:skip_filenames] && @options[:skip_filenames].any? { |str|
+      if @options[:skip_filenames].any? { |str|
           str.include?(File.basename(i))
         }
         next
       else
-        if @options[:only_filenames] && @options[:only_filenames].any? { |str|
+        if @options[:only_filenames].any? { |str|
           str.include?(File.basename(i))
           } && @options[:only_nice]
           optimized_image = @nice_image_optim.optimize_image(i)
