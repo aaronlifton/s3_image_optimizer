@@ -40,13 +40,14 @@ class S3ImageOptimizer::ImageOptimizer
         allow_lossy: true,
         max_quality: 75
       }
-    }
+    },
+    skip_filenames: [],
+    only_filenames: []
   }.freeze
 
   def initialize(options = {})
     @options = options.merge(DEFAULT_OPTIONS)
     set_settings
-    puts @options
     @image_optim = ImageOptim.new(@options[:image_optim])
     @nice_image_optim = ImageOptim.new(@options[:image_optim].merge(@options[:nice_image_optim]))
   end
@@ -71,12 +72,12 @@ class S3ImageOptimizer::ImageOptimizer
     puts "\nOptimizing..."
     @optimized_images = images.map do |i|
       original_path = i.path
-      if @options[:skip_filenames].any? { |str|
+      if @options[:skip_filenames] && @options[:skip_filenames].any? { |str|
           str.include?(File.basename(i))
         }
         next
       else
-        if @options[:only_filenames].any? { |str|
+        if @options[:only_filenames] && @options[:only_filenames].any? { |str|
           str.include?(File.basename(i))
           } && @options[:only_nice]
           optimized_image = @nice_image_optim.optimize_image(i)

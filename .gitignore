@@ -11,4 +11,5 @@
 *.gem
 nohup.out
 uploaded.txt
+*keys*.json
 failed.txt
