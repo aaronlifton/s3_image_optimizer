@@ -95,3 +95,6 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/aaronl
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+## Credits
+
+shout out to https://github.com/chirag7jain/S3ImageOptimizer for inspiration!
