@@ -71,10 +71,14 @@ class S3ImageOptimizer::Client
 
   def upload_optimized_images
     @image_uploader = S3ImageOptimizer::Bucket::ImageUploader.new(credentials, @s3_bucket, @options)
-    if @image_optimizer
+    if @image_optimizer && @image_optimizer.optimized_images.any?
       @image_uploader.upload_all(@image_optimizer.optimized_images)
     else
-      images = Dir.glob("#{@options[:tmp_download_path]}/**/*.*")
+      images = if @options[:tmp_download_path]
+        Dir.glob("#{@options[:tmp_download_path]}/**/*.*")
+      else
+        Dir.glob("#{@options[:tmp_download_path]}/**/*.*")
+      end
       if images.any?
         @image_uploader.upload_all(images)
       else
