@@ -40,18 +40,19 @@ if ARGV[1..-1]
   end
 end
 
+if options[:tmp] && !options[:tmp_download_path]
+  options[:tmp_download_path] = options[:tmp]
+end
+formatted_opts = options.to_a.map {|aa| (aa.last != '') ? aa.join('=') : nil}.compact.join(' ')
+
 case mode
 when "optimize_daemon"
-  system "nohup s3imageoptimizer optimize &"
+  system "nohup s3imageoptimizer optimize #{formatted_opts} &"
 when "optimize"
   S3ImageOptimizer.optimize_bucket!(options)
 when "upload"
   S3ImageOptimizer.upload_all!(options)
 when "upload_daemon"
-  if options[:tmp] && !options[:tmp_download_path]
-    options[:tmp_download_path] = options[:tmp]
-  end
-  formatted_opts = options.to_a.map {|aa| (aa.last != '') ? aa.join('=') : nil}.compact.join(' ')
   system "nohup s3imageoptimizer upload #{formatted_opts} &"
 when "optimize_dir"
   S3ImageOptimizer.optimize_dir!((options[:dir] || Dir.pwd), options)
